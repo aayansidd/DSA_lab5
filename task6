@@ -1,0 +1,128 @@
+#include <iostream>
+using namespace std;
+
+struct node {
+    int data;
+    node *next;
+};
+
+struct LinkedStack {
+private:
+    node *top = nullptr;
+public:
+    node *temp = nullptr;
+    node *next = nullptr;
+
+
+    void push(int val) {
+        node *newnode = new node;
+        newnode->data = val;
+        newnode->next = top;
+        top = newnode;
+    }
+
+    void pop() {
+
+        if (top == nullptr) {
+            cout << "Stack is empty";
+        }else {
+            temp = top;
+            top = top->next;
+            int popVal = temp->data;
+
+            cout << popVal << " Value is popped";
+            delete temp;
+        }
+
+    }
+
+    void peek() {
+        if (isEmpty()) {
+            cout << "Stack is empty! Nothing to peek." << endl;
+            return;
+        }
+        cout << "Top element: " << top->data << endl;
+    }
+
+    bool isEmpty() {
+        return top == nullptr;
+    }
+
+    void display() {
+        temp = top;
+        while (temp != nullptr) {
+            cout << temp->data << "->";
+            temp = temp->next;
+
+        }
+        cout << "nullptr";
+    }
+
+    void clearStack() {
+        temp = top;
+        while (temp != nullptr) {
+            next = temp;
+            temp = temp->next;
+            delete next;
+        }
+        top = nullptr;
+
+    }
+};
+
+int main() {
+    LinkedStack stack;
+    int choice, val;
+
+    cout << " Task 6 Test Suite " << endl;
+
+
+    stack.push(10);
+    stack.push(20);
+    stack.push(30);
+
+
+    stack.display();
+
+    stack.pop();
+    stack.peek();
+
+
+    stack.pop();
+    stack.pop();
+
+
+    stack.pop();
+
+    //  Interactive Repeating Menu
+    cout << "\n=Interactive Menu " << endl;
+    do {
+        cout << "\n1. Push  2. Pop  3. Peek  4. Display  5. Exit\nChoice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter value: ";
+                cin >> val;
+                stack.push(val);
+                break;
+            case 2:
+                stack.pop();
+                break;
+            case 3:
+                stack.peek();
+                break;
+            case 4:
+                stack.display();
+                break;
+            case 5:
+                cout << "Releasing remaining nodes and exiting" << endl;
+                stack.clearStack();
+                break;
+            default:
+                cout << "Invalid choice" << endl;
+        }
+    } while (choice != 5);
+
+    return 0;
+}
