@@ -1,0 +1,105 @@
+#include <iostream>
+using namespace std;
+
+// Singly linked node
+struct node {
+    int data;
+    node *next;
+};
+
+struct linkedList {
+    node *head = nullptr;
+    node *tail = nullptr;
+
+    // Append new value and preserve tail->next = head
+    void addNode(int value) {
+        node *newnode = new node{value, nullptr};
+
+        if (head == nullptr) {
+            head = newnode;
+            tail = newnode;
+            tail->next = head; // Point back to head
+        } else {
+            tail->next = newnode;
+            tail = newnode;
+            tail->next = head; // Preserve circular link
+        }
+    }
+
+    // Traversal stopping after one complete cycle
+    void printList() {
+        if (head == nullptr) {
+            cout << "List is empty" << endl;
+            return;
+        }
+
+        node *curr = head;
+        do {
+            cout << curr->data << " ";
+            curr = curr->next;
+        } while (curr != head);
+        cout << endl;
+    }
+
+    // Counts nodes in one complete cycle
+    int countNodes() {
+        if (head == nullptr) {
+            return 0;
+        }
+
+        int count = 0;
+        node *curr = head;
+        do {
+            count++;
+            curr = curr->next;
+        } while (curr != head);
+
+        return count;
+    }
+
+    // Safely deletes all nodes by breaking the circular link first
+    void clearList() {
+        if (head == nullptr) return;
+
+        // Break circular link so standard loop can terminate at nullptr
+        tail->next = nullptr;
+
+        node *curr = head;
+        while (curr != nullptr) {
+            node *nextNode = curr->next;
+            delete curr;
+            curr = nextNode;
+        }
+
+        head = nullptr;
+        tail = nullptr;
+    }
+};
+
+int main() {
+    linkedList list;
+
+
+    cout << "Empty List " << endl;
+    cout << "Count: " << list.countNodes() << endl;
+    cout << "List: ";
+    list.printList();
+
+
+    cout << "\n One Node" << endl;
+    list.addNode(10);
+    cout << "Count: " << list.countNodes() << endl;
+    cout << "List: ";
+    list.printList();
+
+
+    cout << "\nThree Node " << endl;
+    list.addNode(20);
+    list.addNode(30);
+    cout << "Count: " << list.countNodes() << endl;
+    cout << "List: ";
+    list.printList();
+
+    list.clearList();
+    return 0;
+}
