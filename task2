@@ -1,0 +1,141 @@
+#include <iostream>
+using namespace std;
+
+struct node {
+    node *head;
+    node *prev;
+    node *next;
+    int data;
+};
+
+struct linkedList {
+    node *head = nullptr;
+    node *prev = nullptr;
+    node *curr = nullptr;
+    node *next = nullptr;
+    node *tail = nullptr;
+
+    void addNode(int data) {
+        node *newnode = new node;
+        newnode->data = data;
+        newnode->next = nullptr;
+
+        if (head == nullptr) {
+            head = newnode;
+            tail = newnode;
+            newnode->prev = nullptr;
+
+        } else {
+            tail->next = newnode;
+            newnode->prev = tail;
+            tail = newnode;
+
+
+        }
+    }
+
+    void printForward() {
+        curr = head;
+        while (curr != nullptr) {
+            cout << curr->data << "->";
+            curr = curr->next;
+        }
+        cout << "NULLPTR" << endl;
+
+    }
+
+    void printReverse() {
+        curr = tail;
+
+        while (curr != nullptr) {
+            cout << curr->data << "<-";
+            curr = curr->prev;
+        }
+        cout << "NULLPTR" << endl;
+
+    }
+
+    void clearList() {
+        curr = head;
+        while (curr->next != nullptr) {
+            next = curr->next;
+            delete curr;
+            curr = next;
+        }
+        head = nullptr;
+        tail = nullptr;
+    }
+
+    void insertBefore(int pos, int val) {
+        curr = head;
+        node *newnode = new node;
+        newnode->data = val;
+
+        for (int i = 0; i < pos && curr != nullptr; i++) {
+            curr = curr->next;
+        }
+
+        if (curr == nullptr) {
+            cout << "Invalid position";
+        }
+
+        if (curr != nullptr) {
+            newnode->next = curr;
+            curr->prev->next = newnode;
+            newnode->prev = curr->prev;
+            curr->prev = newnode;
+        }
+
+    }
+
+    void deleteNode(int val) {
+        curr = head;
+
+        // Find the node
+        while (curr != nullptr && curr->data != val) {
+            curr = curr->next;
+        }
+
+        // Node not found
+        if (curr == nullptr) {
+            cout << "Does not exist" << endl;
+            return;
+        }
+
+        // Update the PREVIOUS node (or the head pointer)
+        if (curr == head) {
+            head = curr->next; // Curr is head, so the new head is the next node
+        } else {
+            curr->prev->next = curr->next; // Curr is not head, bridge the node before it
+        }
+
+        //  Update the NEXT node
+        if (curr == tail) {
+            tail = curr->prev; // Curr is tail, so the new tail is the previous node
+        } else {
+            curr->next->prev = curr->prev; // Curr is not tail, bridge the node after it
+        }
+
+        delete curr;
+    }
+};
+
+int main() {
+    linkedList *myList = new linkedList;
+
+    int n, data;
+    cout << "Enter n: ";
+    cin >> n;
+
+    for (int i = 0; i < n; i++) {
+        cout << "Enter data: ";
+        cin >> data;
+        myList->addNode(data);
+    }
+
+    myList->insertBefore(2, 15);
+    myList->deleteNode(20);
+    myList->printForward();
+    myList->printReverse();
+
+}
