@@ -1,0 +1,81 @@
+#include <iostream>
+using namespace std;
+
+
+struct ArrayStack {
+    int top = -1;
+    int arr[5];
+
+    void push(int val) {
+        if (top == -1) {
+            arr[0] = val;
+            top = 0;
+        } else if (top < 4) {
+            top++;
+            arr[top] = val;
+        } else {
+            cout << "Stack full" << endl;
+        }
+    }
+
+    void pop() {
+        if (top == -1) {
+            cout << "Stack empty";
+        }else {
+            cout << arr[top] << " value removed" << endl;
+            top--;
+        }
+    }
+
+    void peak() {
+        if (top == -1) {
+            cout << "Stack empty";
+        }else {
+            cout << arr[top] << " value at top" << endl;
+        }
+    }
+
+    bool isEmpty() {
+        if (top == -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    void isFull() {
+        if (top == 4) {
+            cout << "Stack full";
+        }
+    }
+
+    void display() {
+        int count = 0;
+        if (top == -1) {
+            cout << "Stack empty";
+        }else {
+            while (count <= top) {
+                cout << arr[count];
+                count++;
+            }
+        }
+
+    }
+};
+
+int main() {
+    ArrayStack *myStack = new ArrayStack;
+    myStack->push(10);
+    myStack->push(20);
+    myStack->push(30);
+    myStack->push(40);
+    myStack->push(50);
+    myStack->push(70);
+    myStack->pop();
+    myStack->peak();
+    myStack->pop();
+    myStack->pop();
+    myStack->pop();
+    myStack->pop();
+    myStack->pop();
+}
